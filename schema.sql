@@ -1,0 +1,12 @@
+PRAGMA foreign_keys=ON;
+CREATE TABLE IF NOT EXISTS officers(id INTEGER PRIMARY KEY, name TEXT NOT NULL, username TEXT UNIQUE NOT NULL, password TEXT NOT NULL, role TEXT NOT NULL CHECK(role IN ('admin','officer')));
+CREATE TABLE IF NOT EXISTS complainants(id INTEGER PRIMARY KEY, name TEXT NOT NULL, phone TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS complaints(id INTEGER PRIMARY KEY, complainant_id INTEGER NOT NULL REFERENCES complainants(id), title TEXT NOT NULL, description TEXT NOT NULL, category TEXT NOT NULL, location TEXT NOT NULL, officer_id INTEGER NOT NULL REFERENCES officers(id), status TEXT NOT NULL DEFAULT 'Registered' CHECK(status IN ('Registered','Investigating','Resolved','Closed')), created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS evidence(id INTEGER PRIMARY KEY, complaint_id INTEGER NOT NULL REFERENCES complaints(id), label TEXT NOT NULL, kind TEXT NOT NULL, filename TEXT, content BLOB, sha256 TEXT, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS custody(id INTEGER PRIMARY KEY, evidence_id INTEGER NOT NULL REFERENCES evidence(id), officer_id INTEGER NOT NULL REFERENCES officers(id), location TEXT NOT NULL, purpose TEXT NOT NULL, recorded_by INTEGER NOT NULL REFERENCES officers(id), created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE IF NOT EXISTS status_history(id INTEGER PRIMARY KEY, complaint_id INTEGER NOT NULL REFERENCES complaints(id), status TEXT NOT NULL, note TEXT NOT NULL, officer_id INTEGER NOT NULL REFERENCES officers(id), created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE INDEX IF NOT EXISTS ix_complaints_status ON complaints(status);
+CREATE INDEX IF NOT EXISTS ix_evidence_case ON evidence(complaint_id);
+CREATE INDEX IF NOT EXISTS ix_custody_evidence ON custody(evidence_id,id);
+CREATE TRIGGER IF NOT EXISTS custody_no_update BEFORE UPDATE ON custody BEGIN SELECT RAISE(ABORT,'Custody history is append-only'); END;
+CREATE TRIGGER IF NOT EXISTS custody_no_delete BEFORE DELETE ON custody BEGIN SELECT RAISE(ABORT,'Custody history is append-only'); END;

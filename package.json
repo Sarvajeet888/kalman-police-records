@@ -1,0 +1,19 @@
+{
+  "name": "kalman-police-records",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Police Complaint and Evidence Tracking System — Kalman Systems DBMS project",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": {
+    "preinstall": "node scripts/check-node.js",
+    "start": "node scripts/start.js",
+    "dev": "node --watch scripts/start.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "multer": "^2.0.2",
+    "nunjucks": "^3.2.4"
+  }
+}

@@ -1,0 +1,23 @@
+KALMAN SYSTEMS - NODE / NPM VERSION
+
+Requires Node.js 24 or newer (https://nodejs.org/).
+
+1. Extract the ZIP.
+2. Open the extracted folder containing package.json.
+3. In that folder, open Command Prompt / Terminal.
+4. Run: npm install
+5. Run: npm start
+6. Open: http://localhost:3000
+
+Login: admin
+Password: Kalman@123
+
+If port 3000 is busy, use the address printed in the terminal.
+Keep the terminal open. Ctrl+C stops the server.
+Next time, only npm start is needed.
+
+PowerShell blocks npm.ps1? Use npm.cmd install and npm.cmd start,
+or use Command Prompt. Do not change your execution policy.
+
+There are no Python or BAT files in this version.
+The six-slide PowerPoint is included.
